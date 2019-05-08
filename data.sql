@@ -12,7 +12,7 @@ CREATE TABLE jobs (
     title text NOT NULL,
     salary NUMERIC,
     equity FLOAT NOT NULL CHECK (equity<1),
-    company_handle text NOT NULL REFERENCES companies, 
+    company_handle text NOT NULL REFERENCES companies ON DELETE CASCADE, 
     date_posted timestamp without time zone DEFAULT NOW()
 );
 
