@@ -7,7 +7,8 @@ class Job {
   static async createJob(obj) {
     const results = await db.query(`
         INSERT INTO jobs (title, salary, equity, company_handle)
-        VALUES ($1, $2, $3, $4) RETURNING title, salary, equity, company_handle
+        VALUES ($1, $2, $3, $4) 
+        RETURNING title, salary, equity, company_handle
         `, [obj.title, obj.salary, obj.equity, obj.company_handle]);
 
     return results.rows[0];
@@ -50,6 +51,7 @@ class Job {
             JOIN companies c ON c.handle = j.company_handle
         WHERE j.id=$1`, [id]);
 
+    //Destructure  
     let m = result.rows[0];
 
     if (!m) {

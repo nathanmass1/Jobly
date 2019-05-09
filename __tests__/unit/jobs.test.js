@@ -1,6 +1,5 @@
 process.env.NODE_ENV = "test";
 
-const companies = require("../../routes/companies");
 const jobs = require("../../models/job");
 const app = require("../../app");
 const db = require("../../db");
@@ -56,16 +55,6 @@ describe("GET Route ", () => {
   test("Get single job", async function () {
     const response = await request(app).get('/jobs/3');
     expect(response.statusCode).toBe(200);
-    // console.log("DOES THIS WORKKKK?", job)
-    // console.log("JOB BODY ************", response.body.job)
-    // expect(response.body.job.handle).toEqual("twitter");
-
-
-  // test("Get invalid single company", async function () {
-  //   const response = await request(app).get('/jobs/20000');
-  //   console.log(response.body)
-  //   expect(response.body.job.status).toBe(404);
-  //   expect(response.body.job.message).toBe("No such job exists");
   });
 });
 

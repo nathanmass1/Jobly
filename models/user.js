@@ -13,7 +13,8 @@ class User {
 
       const results = await db.query(`
           INSERT INTO users (username, password, first_name, last_name, email, photo_url, is_admin)
-          VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING username, first_name, last_name, email, is_admin
+          VALUES ($1, $2, $3, $4, $5, $6, $7) 
+          RETURNING username, first_name, last_name, email, is_admin
           `, [username, hashedPassword, first_name, last_name, email, photo_url, is_admin]);
 
       return results.rows[0];
@@ -39,26 +40,34 @@ class User {
   }
 
   static async updateUser(newInfo, username) {
-
+    // Consider case where password not provided
     const hashedPassword = await bcrypt.hash(newInfo.password, BCRYPT_WORK_ROUNDS);
-
     newInfo.password = hashedPassword;
 
     let queryObj = pUpdate("users", newInfo, "username", username);
-    const results = await db.query(
-      queryObj.query, queryObj.values
-    );
-
-    let returnObj = results.rows[0];
-    delete returnObj.password;
-
+    const results = await db.query(queryObj.query, queryObj.values);
+    // TO-DO: Test line 50
+    let { password, ...returnObj } = results.rows[0];
     return returnObj;
   }
 
+
+  static async authenticate(username, password) {
+    const result = await db.query(`Select password from users where username = $1`, [username]);
+    const user = result.rows[0];
+
+    if(user) {
+      const passwordValid = await bcrypt.compare(password, user.password);
+      if (passwordValid) { return true; }
+    }
+    return false;
+  }
+
+
   static async delete(username) {
 
-    const results = await db.query(`
-    DELETE FROM users where username = $1 RETURNING username
+    const results = await db.query(`DELETE FROM users where username = $1 
+    RETURNING username
     `, [username]);
 
     if (results.rows.length === 0) {

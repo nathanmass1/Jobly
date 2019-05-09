@@ -1,6 +1,5 @@
 process.env.NODE_ENV = "test";
 
-const companies = require("../../routes/companies");
 const app = require("../../app");
 const db = require("../../db");
 const request = require("supertest");
@@ -14,10 +13,8 @@ beforeEach(async function () {
 });
 
 afterEach(async function () {
-  await db.query(`
-    DELETE FROM jobs `);
-  await db.query(`
-    DELETE FROM companies `);
+  await db.query(`DELETE FROM jobs `);
+  await db.query(`DELETE FROM companies `);
 });
 
 afterAll(function () {

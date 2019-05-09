@@ -1,8 +1,5 @@
 process.env.NODE_ENV = "test";
 
-const users = require("../../routes/users");
-const companies = require("../../routes/companies");
-const jobs = require("../../models/job");
 const app = require("../../app");
 const db = require("../../db");
 const request = require("supertest");
@@ -52,8 +49,6 @@ describe("GET Route ", () => {
   test("Get single user", async function () {
     const response = await request(app).get('/users/jon');
     expect(response.statusCode).toBe(200);
-    // console.log("DOES THIS WORKKKK?", job)
-    // console.log("JOB BODY ************", response.body.job)
-    // expect(response.body.job.handle).toEqual("twitter");
+
   });
 });
